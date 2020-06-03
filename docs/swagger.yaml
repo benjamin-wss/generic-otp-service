@@ -1,0 +1,140 @@
+basePath: /
+definitions:
+  dto.ApiInputBasicOtp:
+    properties:
+      interval:
+        type: integer
+      length:
+        type: integer
+      requester:
+        type: string
+    type: object
+  dto.ApiInputValidateBasicOtp:
+    properties:
+      interval:
+        type: integer
+      length:
+        type: integer
+      otp:
+        type: string
+      requester:
+        type: string
+    type: object
+  dto.ApiResultBasicOtp:
+    properties:
+      expiryInSeconds:
+        type: integer
+      otp:
+        type: string
+    type: object
+  dto.ApiResultValidateBasicOtp:
+    properties:
+      input:
+        $ref: '#/definitions/dto.ApiInputValidateBasicOtp'
+        type: object
+      isValid:
+        type: boolean
+    type: object
+  dto.HealthCheckGreeting:
+    properties:
+      date:
+        example: "2020-06-04T00:00:16.2963059+08:00"
+        type: string
+      greeting:
+        example: Ah, la vache! Ze service is working !
+        type: string
+      uptime:
+        example: "10178631900"
+        type: string
+    type: object
+  dto.HttpError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: do-not-mail-this@pintu.dk
+    name: Benjamin Wong
+    url: http://www.swagger.io/support
+  description: Generic OTP API Service.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Generic OTP Service API
+  version: "1.0"
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: Returns values regarding sever uptime and caller HTTP request metadata
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.HealthCheckGreeting'
+      summary: Gets status of current server
+      tags:
+      - server-health-check
+  /api/internal/v1/acquire:
+    post:
+      consumes:
+      - application/json
+      description: 'Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm'
+      parameters:
+      - description: Payload to generate T.O.T.P.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ApiInputBasicOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResultBasicOtp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.HttpError'
+      summary: Generates T.O.T.P. number.
+      tags:
+      - Bambu
+  /api/internal/v1/validate:
+    post:
+      consumes:
+      - application/json
+      description: 'Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm'
+      parameters:
+      - description: Payload to validate T.O.T.P.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ApiInputValidateBasicOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResultValidateBasicOtp'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.HttpError'
+      summary: Validates T.O.T.P. number.
+      tags:
+      - Bambu
+swagger: "2.0"

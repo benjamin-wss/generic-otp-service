@@ -1,0 +1,16 @@
+{
+  "name": "generic-otp-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "echo \"This is just for automation tasks\" && exit 1",
+    "docker:build": "docker build -t generic-otp-service .",
+    "docker:start": "docker run -p 3000:3000 -d generic-otp-service"
+  },
+  "author": "",
+  "license": "ISC"
+}

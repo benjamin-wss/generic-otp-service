@@ -1,0 +1,211 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Generic OTP API Service.",
+        "title": "Generic OTP Service API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Benjamin Wong",
+            "url": "http://www.swagger.io/support",
+            "email": "do-not-mail-this@pintu.dk"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Returns values regarding sever uptime and caller HTTP request metadata",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "server-health-check"
+                ],
+                "summary": "Gets status of current server",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HealthCheckGreeting"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/internal/v1/acquire": {
+            "post": {
+                "description": "Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Bambu"
+                ],
+                "summary": "Generates T.O.T.P. number.",
+                "parameters": [
+                    {
+                        "description": "Payload to generate T.O.T.P.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ApiInputBasicOtp"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ApiResultBasicOtp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HttpError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/internal/v1/validate": {
+            "post": {
+                "description": "Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Bambu"
+                ],
+                "summary": "Validates T.O.T.P. number.",
+                "parameters": [
+                    {
+                        "description": "Payload to validate T.O.T.P.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ApiInputValidateBasicOtp"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ApiResultValidateBasicOtp"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HttpError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.ApiInputBasicOtp": {
+            "type": "object",
+            "properties": {
+                "interval": {
+                    "type": "integer"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "requester": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ApiInputValidateBasicOtp": {
+            "type": "object",
+            "properties": {
+                "interval": {
+                    "type": "integer"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "otp": {
+                    "type": "string"
+                },
+                "requester": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ApiResultBasicOtp": {
+            "type": "object",
+            "properties": {
+                "expiryInSeconds": {
+                    "type": "integer"
+                },
+                "otp": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ApiResultValidateBasicOtp": {
+            "type": "object",
+            "properties": {
+                "input": {
+                    "type": "object",
+                    "$ref": "#/definitions/dto.ApiInputValidateBasicOtp"
+                },
+                "isValid": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dto.HealthCheckGreeting": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "example": "2020-06-04T00:00:16.2963059+08:00"
+                },
+                "greeting": {
+                    "type": "string",
+                    "example": "Ah, la vache! Ze service is working !"
+                },
+                "uptime": {
+                    "type": "string",
+                    "example": "10178631900"
+                }
+            }
+        },
+        "dto.HttpError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 400
+                },
+                "message": {
+                    "type": "string",
+                    "example": "status bad request"
+                }
+            }
+        }
+    }
+}
