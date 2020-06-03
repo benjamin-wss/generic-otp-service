@@ -2,9 +2,9 @@ basePath: /
 definitions:
   dto.ApiInputBasicOtp:
     properties:
-      interval:
-        type: integer
       length:
+        type: integer
+      otpLifespanInSeconds:
         type: integer
       requester:
         type: string

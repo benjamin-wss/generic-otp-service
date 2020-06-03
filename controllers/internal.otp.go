@@ -30,7 +30,7 @@ func (instance InternalOtpController) GenerateOtpNumber(context *gin.Context) {
 	}
 
 	service := services.InternalOtpService{}
-	otp, expiryInSeconds, exception := service.GenerateOtp(input.Requester, input.Length, input.Interval)
+	otp, expiryInSeconds, exception := service.GenerateOtp(input.Requester, input.Length, input.OtpLifespanInSeconds)
 
 	if exception != nil {
 		utilities.HttpErrorUtils{}.NewHttpError(context, 500, exception)

@@ -141,10 +141,10 @@ var doc = `{
         "dto.ApiInputBasicOtp": {
             "type": "object",
             "properties": {
-                "interval": {
+                "length": {
                     "type": "integer"
                 },
-                "length": {
+                "otpLifespanInSeconds": {
                     "type": "integer"
                 },
                 "requester": {

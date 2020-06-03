@@ -1,9 +1,9 @@
 package dto
 
 type ApiInputBasicOtp struct {
-	Requester string `json:"requester"`
-	Length    int    `json:"length"`
-	Interval  int    `json:"interval"`
+	Requester            string `json:"requester"`
+	Length               int    `json:"length"`
+	OtpLifespanInSeconds int    `json:"otpLifespanInSeconds"`
 }
 
 type ApiResultBasicOtp struct {
