@@ -6,7 +6,7 @@ Just a project to learn GO and a thought experiment around OTP generation.
 Just some notes. To get this working:
 
 1. Well, you obviously need GoLang installed.
-2. Assuming you mustered the intelligence to install GO, you will need to run `go mod download` to install dependencies for this project.
+2. Assuming you mustered the intelligence to install GO, you will need to run `go mod download` to install dependencies for this project. If it was not immediately obvious, do that in the root directory of the project.
 
 ## Starting - Local
 
