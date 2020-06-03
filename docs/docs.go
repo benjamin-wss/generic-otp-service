@@ -22,7 +22,7 @@ var doc = `{
         "contact": {
             "name": "Benjamin Wong",
             "url": "http://www.swagger.io/support",
-            "email": "do-not-mail-this@pintu.dk"
+            "email": "do-not-mail-this@gmail.com"
         },
         "license": {
             "name": "Apache 2.0",

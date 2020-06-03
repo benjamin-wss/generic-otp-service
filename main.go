@@ -18,7 +18,7 @@ import (
 
 // @contact.name Benjamin Wong
 // @contact.url http://www.swagger.io/support
-// @contact.email do-not-mail-this@pintu.dk
+// @contact.email do-not-mail-this@gmail.com
 
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
@@ -45,37 +45,3 @@ func main() {
 
 	_ = router.Run(ginHttpPortNumber)
 }
-
-//package main
-//
-//import (
-//	"fmt"
-//	"github.com/xlzd/gotp"
-//	"strings"
-//	"time"
-//)
-//
-//func main() {
-//	otp := generateOtp()
-//	time.Sleep(2 * time.Second)
-//
-//	res := validateOtp(otp)
-//
-//	fmt.Printf("Piki: %t", res)
-//}
-//
-//var sec = strings.ToUpper("4S62BZNFXXSZLCRObenpintudk")
-//
-//func generateOtp() string {
-//	otp := gotp.NewTOTP(sec, 6, 1, nil)
-//	otpValue, _ := otp.NowWithExpiration()
-//
-//	return otpValue
-//}
-//
-//func validateOtp(input string) bool {
-//	otp := gotp.NewTOTP(sec, 6, 300, nil)
-//	res := otp.Verify(input, int(time.Now().Unix()))
-//
-//	return res
-//}

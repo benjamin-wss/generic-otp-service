@@ -59,7 +59,7 @@ definitions:
 host: localhost:3000
 info:
   contact:
-    email: do-not-mail-this@pintu.dk
+    email: do-not-mail-this@gmail.com
     name: Benjamin Wong
     url: http://www.swagger.io/support
   description: Generic OTP API Service.
