@@ -66,7 +66,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Bambu"
+                    "internal-otp"
                 ],
                 "summary": "Generates T.O.T.P. number.",
                 "parameters": [
@@ -106,7 +106,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Bambu"
+                    "internal-otp"
                 ],
                 "summary": "Validates T.O.T.P. number.",
                 "parameters": [

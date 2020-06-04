@@ -116,7 +116,7 @@ paths:
             $ref: '#/definitions/dto.HttpError'
       summary: Generates T.O.T.P. number.
       tags:
-      - Bambu
+      - internal-otp
   /api/internal/v1/validate:
     post:
       consumes:
@@ -142,5 +142,5 @@ paths:
             $ref: '#/definitions/dto.HttpError'
       summary: Validates T.O.T.P. number.
       tags:
-      - Bambu
+      - internal-otp
 swagger: "2.0"

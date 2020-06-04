@@ -15,7 +15,7 @@ type InternalOtpController struct {
 // GenerateOtpNumber godoc
 // @Summary Generates T.O.T.P. number.
 // @Description Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm
-// @Tags Bambu
+// @Tags internal-otp
 // @Accept  json
 // @Produce  json
 // @Param payload body dto.ApiInputBasicOtp true "Payload to generate T.O.T.P."
@@ -44,7 +44,7 @@ func (instance InternalOtpController) GenerateOtpNumber(context *gin.Context) {
 // GenerateOtpNumber godoc
 // @Summary Validates T.O.T.P. number.
 // @Description Validates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm
-// @Tags Bambu
+// @Tags internal-otp
 // @Accept  json
 // @Produce  json
 // @Param payload body dto.ApiInputValidateBasicOtp true "Payload to validate T.O.T.P."
