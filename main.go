@@ -28,7 +28,6 @@ import (
 
 func main() {
 	router := gin.Default()
-	router.Use(gzip.Gzip(gzip.BestSpeed))
 
 	router.GET("/", uptime.CalculateUptime, controllers.IndexController{}.Get)
 
@@ -40,6 +39,8 @@ func main() {
 
 	url := ginSwagger.URL("http://localhost:3000/swagger/doc.json") // The url pointing to API definition
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
+	router.Use(gzip.Gzip(gzip.BestSpeed))
 
 	ginHttpPortNumber := fmt.Sprintf(":%d", 3000)
 
