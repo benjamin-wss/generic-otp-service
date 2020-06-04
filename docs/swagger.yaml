@@ -121,7 +121,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 'Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm'
+      description: 'Validates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm'
       parameters:
       - description: Payload to validate T.O.T.P.
         in: body

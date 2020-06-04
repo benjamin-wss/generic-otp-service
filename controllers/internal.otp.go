@@ -43,7 +43,7 @@ func (instance InternalOtpController) GenerateOtpNumber(context *gin.Context) {
 
 // GenerateOtpNumber godoc
 // @Summary Validates T.O.T.P. number.
-// @Description Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm
+// @Description Validates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm
 // @Tags Bambu
 // @Accept  json
 // @Produce  json

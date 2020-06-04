@@ -98,7 +98,7 @@ var doc = `{
         },
         "/api/internal/v1/validate": {
             "post": {
-                "description": "Generates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm",
+                "description": "Validates T.O.T.P. number. Read more: https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm",
                 "consumes": [
                     "application/json"
                 ],
