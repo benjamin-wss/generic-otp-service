@@ -60,10 +60,10 @@ func (instance InternalOtpController) ValidateOtpNumber(context *gin.Context) {
 	}
 
 	service := services.InternalOtpService{}
-	isValid, exception := service.ValidateOtp(input.Requester, input.Length, input.Interval, input.Otp)
+	isValid, exception := service.ValidateOtpForApi(input.Requester, input.Length, input.Interval, input.Otp, input.ReferenceToken)
 
 	if exception != nil {
-		utilities.HttpErrorUtils{}.NewHttpError(context, 500, exception)
+		utilities.HttpErrorUtils{}.NewHttpError(context, exception.HttpStatus, exception.Error)
 		return
 	}
 

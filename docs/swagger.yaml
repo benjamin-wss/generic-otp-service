@@ -18,7 +18,10 @@ definitions:
         type: integer
       otp:
         type: string
+      referenceToken:
+        type: string
       requester:
+        example: jim@starfleet.com
         type: string
     type: object
   dto.ApiResultValidateBasicOtp:

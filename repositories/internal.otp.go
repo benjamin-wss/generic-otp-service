@@ -37,14 +37,14 @@ func (instance InternalOtp) GenerateTimeBasedOtp(requester string, length int, i
 	return payload, nil
 }
 
-func (instance InternalOtp) ValidateTimeBasedOtp(requester string, length int, interval int, otp string) (bool, error) {
+func (instance InternalOtp) ValidateTimeBasedOtp(requester string, length int, interval int, otp, referenceToken string) (bool, error) {
 	_, exception := checkIsRequesterInputValid(requester)
 
 	if exception != nil {
 		return false, exception
 	}
 
-	requesterInUpperCase := getSecret("", requester)
+	requesterInUpperCase := getSecret(referenceToken, requester)
 	lib := gotp.NewTOTP(requesterInUpperCase, length, interval, nil)
 	isValid := lib.Verify(otp, int(time.Now().Unix()))
 

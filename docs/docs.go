@@ -165,8 +165,12 @@ var doc = `{
                 "otp": {
                     "type": "string"
                 },
-                "requester": {
+                "referenceToken": {
                     "type": "string"
+                },
+                "requester": {
+                    "type": "string",
+                    "example": "jim@starfleet.com"
                 }
             }
         },
