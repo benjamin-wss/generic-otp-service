@@ -7,6 +7,7 @@ definitions:
       otpLifespanInSeconds:
         type: integer
       requester:
+        example: jim@starfleet.com
         type: string
     type: object
   dto.ApiInputValidateBasicOtp:
@@ -18,13 +19,6 @@ definitions:
       otp:
         type: string
       requester:
-        type: string
-    type: object
-  dto.ApiResultBasicOtp:
-    properties:
-      expiryInSeconds:
-        type: integer
-      otp:
         type: string
     type: object
   dto.ApiResultValidateBasicOtp:
@@ -54,6 +48,15 @@ definitions:
         type: integer
       message:
         example: status bad request
+        type: string
+    type: object
+  dto.OtpRepositoryTimeBasedOtpResult:
+    properties:
+      expiryInSeconds:
+        type: integer
+      otp:
+        type: string
+      referenceToken:
         type: string
     type: object
 host: localhost:3000
@@ -103,7 +106,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.ApiResultBasicOtp'
+            $ref: '#/definitions/dto.OtpRepositoryTimeBasedOtpResult'
         "500":
           description: Internal Server Error
           schema:

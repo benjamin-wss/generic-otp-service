@@ -32,6 +32,7 @@ COPY --from=builder /api/main .
 
 # Set Env
 ENV GIN_MODE=release
+ENV OTP_SECRET=4S62BZNFXXSZLCRO
 
 EXPOSE 3000
 

@@ -6,6 +6,7 @@ import (
 	"generic-otp-service/utilities"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 type InternalOtpController struct {
@@ -18,7 +19,7 @@ type InternalOtpController struct {
 // @Accept  json
 // @Produce  json
 // @Param payload body dto.ApiInputBasicOtp true "Payload to generate T.O.T.P."
-// @Success 200 {object} dto.ApiResultBasicOtp
+// @Success 200 {object} dto.OtpRepositoryTimeBasedOtpResult
 // @Failure 500 {object} dto.HttpError
 // @Router /api/internal/v1/acquire [post]
 func (instance InternalOtpController) GenerateOtpNumber(context *gin.Context) {
@@ -30,16 +31,14 @@ func (instance InternalOtpController) GenerateOtpNumber(context *gin.Context) {
 	}
 
 	service := services.InternalOtpService{}
-	otp, expiryInSeconds, exception := service.GenerateOtp(input.Requester, input.Length, input.OtpLifespanInSeconds)
+	result, exception := service.GenerateOtpForApi(strings.TrimSpace(input.Requester), input.Length, input.OtpLifespanInSeconds)
 
 	if exception != nil {
-		utilities.HttpErrorUtils{}.NewHttpError(context, 500, exception)
+		utilities.HttpErrorUtils{}.NewHttpError(context, exception.HttpStatus, exception.Error)
 		return
 	}
 
-	response := dto.ApiResultBasicOtp{Otp: otp, ExpiryInSeconds: expiryInSeconds}
-
-	context.JSON(http.StatusOK, response)
+	context.JSON(http.StatusOK, result)
 }
 
 // GenerateOtpNumber godoc

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "echo \"This is just for automation tasks\" && exit 1",
+    "swagger:init": "swag init",
     "docker:build": "docker build -t generic-otp-service .",
     "docker:start": "docker run -p 3000:3000 -d generic-otp-service"
   },

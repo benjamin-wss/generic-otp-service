@@ -84,7 +84,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ApiResultBasicOtp"
+                            "$ref": "#/definitions/dto.OtpRepositoryTimeBasedOtpResult"
                         }
                     },
                     "500": {
@@ -148,7 +148,8 @@ var doc = `{
                     "type": "integer"
                 },
                 "requester": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "jim@starfleet.com"
                 }
             }
         },
@@ -165,17 +166,6 @@ var doc = `{
                     "type": "string"
                 },
                 "requester": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.ApiResultBasicOtp": {
-            "type": "object",
-            "properties": {
-                "expiryInSeconds": {
-                    "type": "integer"
-                },
-                "otp": {
                     "type": "string"
                 }
             }
@@ -219,6 +209,20 @@ var doc = `{
                 "message": {
                     "type": "string",
                     "example": "status bad request"
+                }
+            }
+        },
+        "dto.OtpRepositoryTimeBasedOtpResult": {
+            "type": "object",
+            "properties": {
+                "expiryInSeconds": {
+                    "type": "integer"
+                },
+                "otp": {
+                    "type": "string"
+                },
+                "referenceToken": {
+                    "type": "string"
                 }
             }
         }

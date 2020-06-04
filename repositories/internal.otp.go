@@ -3,7 +3,9 @@ package repositories
 import (
 	"errors"
 	"fmt"
+	"generic-otp-service/config"
 	"generic-otp-service/constants"
+	"generic-otp-service/dto"
 	"github.com/xlzd/gotp"
 	"regexp"
 	"strings"
@@ -12,19 +14,27 @@ import (
 
 type InternalOtp struct{}
 
-func (instance InternalOtp) GenerateTimeBasedOtp(requester string, length int, interval int) (string, int64, error) {
+func (instance InternalOtp) GenerateTimeBasedOtp(requester string, length int, interval int) (dto.OtpRepositoryTimeBasedOtpResult, error) {
 	_, exception := checkIsRequesterInputValid(requester)
+	var payload dto.OtpRepositoryTimeBasedOtpResult
 
 	if exception != nil {
-		return "", 0, exception
+		return payload, exception
 	}
 
-	requesterInUpperCase := getSecret(requester)
-	otp := gotp.NewTOTP(requesterInUpperCase, length, interval, nil)
+	randomSecret := gotp.RandomSecret(16)
+	requesterInUpperCase := getSecret(randomSecret, requester)
+	lib := gotp.NewTOTP(requesterInUpperCase, length, interval, nil)
 
-	otpValue, otpTimeoutInSeconds := otp.NowWithExpiration()
+	otpValue, otpTimeoutInSeconds := lib.NowWithExpiration()
 
-	return otpValue, otpTimeoutInSeconds, nil
+	payload = dto.OtpRepositoryTimeBasedOtpResult{
+		ReferenceToken:  randomSecret,
+		Otp:             otpValue,
+		ExpiryInSeconds: otpTimeoutInSeconds,
+	}
+
+	return payload, nil
 }
 
 func (instance InternalOtp) ValidateTimeBasedOtp(requester string, length int, interval int, otp string) (bool, error) {
@@ -34,9 +44,9 @@ func (instance InternalOtp) ValidateTimeBasedOtp(requester string, length int, i
 		return false, exception
 	}
 
-	requesterInUpperCase := getSecret(requester)
-	otpUtil := gotp.NewTOTP(requesterInUpperCase, length, interval, nil)
-	isValid := otpUtil.Verify(otp, int(time.Now().Unix()))
+	requesterInUpperCase := getSecret("", requester)
+	lib := gotp.NewTOTP(requesterInUpperCase, length, interval, nil)
+	isValid := lib.Verify(otp, int(time.Now().Unix()))
 
 	return isValid, nil
 }
@@ -60,8 +70,8 @@ func checkIsRequesterInputValid(requester string) (bool, error) {
 	return true, nil
 }
 
-func getSecret(postfix string) string {
-	baseResult := fmt.Sprintf("%s%s", "4S62BZNFXXSZLCRO", postfix)
+func getSecret(prefix, postfix string) string {
+	baseResult := fmt.Sprintf("%s%s%s", prefix, config.AppConfig.Otp.Secret, postfix)
 	upperCaseResult := strings.ToUpper(baseResult)
 
 	return upperCaseResult

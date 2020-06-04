@@ -1,14 +1,9 @@
 package dto
 
 type ApiInputBasicOtp struct {
-	Requester            string `json:"requester"`
+	Requester            string `json:"requester" example:"jim@starfleet.com"`
 	Length               int    `json:"length"`
 	OtpLifespanInSeconds int    `json:"otpLifespanInSeconds"`
-}
-
-type ApiResultBasicOtp struct {
-	Otp             string `json:"otp"`
-	ExpiryInSeconds int64  `json:"expiryInSeconds"`
 }
 
 type ApiInputValidateBasicOtp struct {

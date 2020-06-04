@@ -3,26 +3,55 @@ package services
 import (
 	"errors"
 	"generic-otp-service/constants"
+	"generic-otp-service/dto"
 	"generic-otp-service/repositories"
 	"regexp"
+	"strings"
 )
 
 type InternalOtpService struct{}
 
-func (instance InternalOtpService) GenerateOtp(requester string, length int, interval int) (string, int64, error) {
+func (instance InternalOtpService) GenerateOtpForApi(requester string, length int, interval int) (*dto.OtpRepositoryTimeBasedOtpResult, *dto.ApiErrorGeneric) {
+	if strings.ToUpper(requester) == "STRING" {
+		return nil, &dto.ApiErrorGeneric{
+			HttpStatus: 400,
+			Error:      errors.New("string is not a valid value for requester"),
+		}
+	}
+
+	if length > 10 {
+		return nil, &dto.ApiErrorGeneric{
+			HttpStatus: 400,
+			Error:      errors.New("the length cannot be greater than 10"),
+		}
+	}
+
+	result, exception := instance.GenerateOtp(requester, length, interval)
+
+	if exception != nil {
+		return nil, &dto.ApiErrorGeneric{
+			HttpStatus: 500,
+			Error:      exception,
+		}
+	}
+
+	return result, nil
+}
+
+func (instance InternalOtpService) GenerateOtp(requester string, length int, interval int) (*dto.OtpRepositoryTimeBasedOtpResult, error) {
 	cleanedRequester, regExpError := cleanRequesterString(requester)
 
 	if regExpError != nil {
-		return "", 0, regExpError
+		return nil, regExpError
 	}
 
-	otpNumber, otpTimeoutInSeconds, exception := repositories.InternalOtp{}.GenerateTimeBasedOtp(cleanedRequester, length, interval)
+	repoResult, exception := repositories.InternalOtp{}.GenerateTimeBasedOtp(cleanedRequester, length, interval)
 
 	if exception != nil {
-		return "", 0, exception
+		return nil, exception
 	}
 
-	return otpNumber, otpTimeoutInSeconds, nil
+	return &repoResult, nil
 }
 
 func (instance InternalOtpService) ValidateOtp(requester string, length int, interval int, otp string) (bool, error) {
@@ -51,6 +80,7 @@ func cleanRequesterString(requester string) (string, error) {
 	}
 
 	processedString := regularExpressionProcessor.ReplaceAllString(requester, "")
+	upperCaseString := strings.ToUpper(processedString)
 
-	return processedString, nil
+	return upperCaseString, nil
 }
