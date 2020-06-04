@@ -14,7 +14,7 @@ type InternalOtpService struct{}
 const invalidSecretKeySegmentString = "string"
 
 func (instance InternalOtpService) GenerateOtpForApi(requester string, length int, interval int) (*dto.OtpRepositoryTimeBasedOtpResult, *dto.ApiErrorGeneric) {
-	inputIssue := guardOtpSetupParameters(requester, length)
+	inputIssue := guardOtpSetupParameters(length)
 
 	if inputIssue != nil {
 		return nil, inputIssue
@@ -32,14 +32,7 @@ func (instance InternalOtpService) GenerateOtpForApi(requester string, length in
 	return result, nil
 }
 
-func guardOtpSetupParameters(requester string, length int) *dto.ApiErrorGeneric {
-	if strings.ToUpper(requester) == strings.ToUpper(invalidSecretKeySegmentString) {
-		return &dto.ApiErrorGeneric{
-			HttpStatus: 400,
-			Error:      errors.New("string is not a valid value for requester"),
-		}
-	}
-
+func guardOtpSetupParameters(length int) *dto.ApiErrorGeneric {
 	if length > 10 {
 		return &dto.ApiErrorGeneric{
 			HttpStatus: 400,
@@ -51,13 +44,7 @@ func guardOtpSetupParameters(requester string, length int) *dto.ApiErrorGeneric 
 }
 
 func (instance InternalOtpService) GenerateOtp(requester string, length int, interval int) (*dto.OtpRepositoryTimeBasedOtpResult, error) {
-	cleanedRequester, regExpError := cleanSecretSectionKey(requester)
-
-	if regExpError != nil {
-		return nil, regExpError
-	}
-
-	repoResult, exception := repositories.InternalOtp{}.GenerateTimeBasedOtp(cleanedRequester, length, interval)
+	repoResult, exception := repositories.InternalOtp{}.GenerateTimeBasedOtp(length, interval)
 
 	if exception != nil {
 		return nil, exception
@@ -67,7 +54,7 @@ func (instance InternalOtpService) GenerateOtp(requester string, length int, int
 }
 
 func (instance InternalOtpService) ValidateOtpForApi(requester string, length int, interval int, otp, referenceToken string) (bool, *dto.ApiErrorGeneric) {
-	inputIssue := guardOtpSetupParameters(requester, length)
+	inputIssue := guardOtpSetupParameters(length)
 
 	if inputIssue != nil {
 		return false, inputIssue
@@ -93,19 +80,13 @@ func (instance InternalOtpService) ValidateOtpForApi(requester string, length in
 }
 
 func (instance InternalOtpService) ValidateOtp(requester string, length int, interval int, otp, referenceToken string) (bool, error) {
-	cleanedRequester, regExpError := cleanSecretSectionKey(requester)
-
-	if regExpError != nil {
-		return false, regExpError
-	}
-
 	cleanedReferenceToken, referenceTokenRegExpError := cleanSecretSectionKey(referenceToken)
 
 	if referenceTokenRegExpError != nil {
 		return false, referenceTokenRegExpError
 	}
 
-	isValid, exception := repositories.InternalOtp{}.ValidateTimeBasedOtp(cleanedRequester, length, interval, otp, cleanedReferenceToken)
+	isValid, exception := repositories.InternalOtp{}.ValidateTimeBasedOtp(length, interval, otp, cleanedReferenceToken)
 
 	if exception != nil {
 		return false, exception
