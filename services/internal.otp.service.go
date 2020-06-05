@@ -2,14 +2,18 @@ package services
 
 import (
 	"errors"
+	"generic-otp-service/config"
 	"generic-otp-service/constants"
 	"generic-otp-service/dto"
+	"generic-otp-service/models"
 	"generic-otp-service/repositories"
 	"regexp"
 	"strings"
 )
 
-type InternalOtpService struct{}
+type InternalOtpService struct {
+	OtpLogDbRepository repositories.IDbOtpLogRepository
+}
 
 const invalidSecretKeySegmentString = "string"
 
@@ -43,14 +47,30 @@ func guardOtpSetupParameters(length int) *dto.ApiErrorGeneric {
 	return nil
 }
 
-func (instance InternalOtpService) GenerateOtp(requester string, length int, interval int) (*dto.OtpRepositoryTimeBasedOtpResult, error) {
-	repoResult, exception := repositories.InternalOtp{}.GenerateTimeBasedOtp(length, interval)
+func (instance InternalOtpService) GenerateOtp(requester string, length int, otpLifespanInSecondsinterval int) (*dto.OtpRepositoryTimeBasedOtpResult, error) {
+	computationResult, exception := repositories.InternalOtp{}.GenerateTimeBasedOtp(length, otpLifespanInSecondsinterval)
 
 	if exception != nil {
 		return nil, exception
 	}
 
-	return &repoResult, nil
+	if config.AppConfig.Otp.OtpRequestLoggingEnabled == true {
+		_, dbError := instance.OtpLogDbRepository.Create(models.OtpLog{
+			Type:                 "ACQUIRE",
+			Requester:            requester,
+			OtpLifespanInSeconds: otpLifespanInSecondsinterval,
+			ExpiryInUnixTime:     computationResult.ExpiryInSeconds,
+			Otp:                  &computationResult.Otp,
+			ReferenceToken:       &computationResult.ReferenceToken,
+			IsConsumed:           false,
+		})
+
+		if dbError != nil {
+			return &computationResult, dbError
+		}
+	}
+
+	return &computationResult, nil
 }
 
 func (instance InternalOtpService) ValidateOtpForApi(requester string, length int, interval int, otp, referenceToken string) (bool, *dto.ApiErrorGeneric) {

@@ -14,17 +14,31 @@ var environmentVariableUtilities = utilities.EnvironmentVariableUtilities{}
 func init() {
 	AppConfig = &types.ApplicationConfig{
 		Otp: setupOtpConfig(),
-		Db:  setupDbConfig(),
+		Db:  *setupDbConfig(),
 	}
 }
 
 func setupOtpConfig() types.OtpConfig {
 	return types.OtpConfig{
-		Secret: environmentVariableUtilities.GetEnvironmentVariableAsString(enums.OtpSecret.ToString()),
+		OtpSecret:                     environmentVariableUtilities.GetEnvironmentVariableAsString(enums.OtpSecret.ToString()),
+		OtpRequestLoggingEnabled:      getOtpRequestLoggingEnabled(),
+		OtpVerificationLoggingEnabled: getOtpVerificationLoggingEnabled(),
 	}
 }
 
-func setupDbConfig() types.DbConfig {
+func getOtpRequestLoggingEnabled() bool {
+	return environmentVariableUtilities.GetEnvironmentVariableAsBoolean(enums.OtpRequestLoggingEnabled.ToString())
+}
+
+func getOtpVerificationLoggingEnabled() bool {
+	return environmentVariableUtilities.GetEnvironmentVariableAsBoolean(enums.OtpVerificationLoggingEnabled.ToString())
+}
+
+func setupDbConfig() *types.DbConfig {
+	if getOtpRequestLoggingEnabled() == false && getOtpVerificationLoggingEnabled() == false {
+		return nil
+	}
+
 	config := types.DbConfig{
 		DbType:               environmentVariableUtilities.GetEnvironmentVariableAsString(enums.DbType.ToString()),
 		DbHost:               environmentVariableUtilities.GetEnvironmentVariableAsString(enums.DbHost.ToString()),
@@ -39,5 +53,5 @@ func setupDbConfig() types.DbConfig {
 		config.DbPostgresSslSetting = environmentVariableUtilities.GetEnvironmentVariableAsString(enums.DbPostgresSslSetting.ToString())
 	}
 
-	return config
+	return &config
 }

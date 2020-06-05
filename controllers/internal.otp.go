@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"generic-otp-service/dto"
+	"generic-otp-service/models"
+	"generic-otp-service/repositories"
 	"generic-otp-service/services"
 	"generic-otp-service/utilities"
 	"github.com/gin-gonic/gin"
@@ -30,7 +32,11 @@ func (instance InternalOtpController) GenerateOtpNumber(context *gin.Context) {
 		return
 	}
 
-	service := services.InternalOtpService{}
+	dbConnection := models.DbPrimary
+	otpLogDbRepository := repositories.GetDbOtpLogRepository(dbConnection)
+	service := services.InternalOtpService{
+		OtpLogDbRepository: otpLogDbRepository,
+	}
 	result, exception := service.GenerateOtpForApi(strings.TrimSpace(input.Requester), input.Length, input.OtpLifespanInSeconds)
 
 	if exception != nil {
