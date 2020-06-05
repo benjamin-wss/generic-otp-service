@@ -33,6 +33,13 @@ COPY --from=builder /api/main .
 # Set Env
 ENV GIN_MODE=release
 ENV OTP_SECRET=4S62BZNFXXSZLCRO
+ENV DB_TYPE=postgres
+ENV DB_HOST=localhost
+ENV DB_PORT=5432
+ENV DB_NAME=generic-otp
+ENV DB_USER=postgres
+ENV DB_PASSWORD=<insert password here>
+ENV DB_POSTGRES_SSL_SETTING=disabled
 
 EXPOSE 3000
 
