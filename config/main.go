@@ -36,7 +36,7 @@ func setupDbConfig() types.DbConfig {
 	}
 
 	if config.DbUser == constants.SupportedDbTypes.Postgres {
-		config.DbPostgresSslSetting = environmentVariableUtilities.GetEnvironmentVariableAsString(enums.DbPassword.ToString())
+		config.DbPostgresSslSetting = environmentVariableUtilities.GetEnvironmentVariableAsString(enums.DbPostgresSslSetting.ToString())
 	}
 
 	return config

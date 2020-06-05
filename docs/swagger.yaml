@@ -12,12 +12,12 @@ definitions:
     type: object
   dto.ApiInputValidateBasicOtp:
     properties:
-      interval:
-        type: integer
       length:
         type: integer
       otp:
         type: string
+      otpLifespanInSeconds:
+        type: integer
       referenceToken:
         type: string
       requester:

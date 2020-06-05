@@ -5,6 +5,7 @@ import (
 	"generic-otp-service/controllers"
 	_ "generic-otp-service/docs"
 	"generic-otp-service/middlewares/uptime"
+	"generic-otp-service/models"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -28,6 +29,8 @@ import (
 
 func main() {
 	router := gin.Default()
+
+	models.ConnectPrimaryDatabase()
 
 	router.GET("/", uptime.CalculateUptime, controllers.IndexController{}.Get)
 

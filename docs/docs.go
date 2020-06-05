@@ -156,14 +156,14 @@ var doc = `{
         "dto.ApiInputValidateBasicOtp": {
             "type": "object",
             "properties": {
-                "interval": {
-                    "type": "integer"
-                },
                 "length": {
                     "type": "integer"
                 },
                 "otp": {
                     "type": "string"
+                },
+                "otpLifespanInSeconds": {
+                    "type": "integer"
                 },
                 "referenceToken": {
                     "type": "string"
