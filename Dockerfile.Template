@@ -39,7 +39,7 @@ ENV DB_PORT=5432
 ENV DB_NAME=generic-otp
 ENV DB_USER=postgres
 ENV DB_PASSWORD=<insert password here>
-ENV DB_POSTGRES_SSL_SETTING=disabled
+ENV DB_POSTGRES_SSL_SETTING=disable
 
 EXPOSE 3000
 
