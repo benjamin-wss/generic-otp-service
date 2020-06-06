@@ -9,15 +9,27 @@ import (
 
 type EnvironmentVariableUtilities struct{}
 
-func (instance EnvironmentVariableUtilities) GetEnvironmentVariableAsString(fieldName string) string {
+func (instance EnvironmentVariableUtilities) GetEnvironmentVariableValuePointer(fieldName string) *string {
 	value := os.Getenv(fieldName)
 
 	if len(strings.TrimSpace(value)) < 1 {
+		return nil
+	}
+
+	trimmedValue := strings.TrimSpace(value)
+
+	return &trimmedValue
+}
+
+func (instance EnvironmentVariableUtilities) GetEnvironmentVariableAsString(fieldName string) string {
+	value := instance.GetEnvironmentVariableValuePointer(fieldName)
+
+	if value == nil {
 		panicMessage := fmt.Sprintf("%s environment variable not specified.", fieldName)
 		panic(panicMessage)
 	}
 
-	return value
+	return *value
 }
 
 func (instance EnvironmentVariableUtilities) GetEnvironmentVariableAsInteger(fieldName string) int {

@@ -23,6 +23,10 @@ func ConnectPrimaryDatabase() {
 
 	database.AutoMigrate(&OtpLog{})
 
+	if config.AppConfig.Gin.Mode == nil {
+		database.LogMode(true)
+	}
+
 	DbPrimary = database
 }
 

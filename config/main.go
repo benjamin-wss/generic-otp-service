@@ -15,6 +15,7 @@ func init() {
 	AppConfig = &types.ApplicationConfig{
 		Otp: setupOtpConfig(),
 		Db:  *setupDbConfig(),
+		Gin: *setupGinConfig(),
 	}
 }
 
@@ -54,4 +55,9 @@ func setupDbConfig() *types.DbConfig {
 	}
 
 	return &config
+}
+
+func setupGinConfig() *types.GinConfig {
+	mode := environmentVariableUtilities.GetEnvironmentVariableValuePointer("GIN_CONFIG")
+	return &types.GinConfig{Mode: mode}
 }

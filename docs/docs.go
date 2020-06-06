@@ -127,6 +127,12 @@ var doc = `{
                             "$ref": "#/definitions/dto.ApiResultValidateBasicOtp"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HttpError"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
                         "schema": {

@@ -5,9 +5,3 @@ type supportedDbTypes struct {
 }
 
 var SupportedDbTypes *supportedDbTypes
-
-func init() {
-	SupportedDbTypes = &supportedDbTypes{
-		Postgres: "postgres",
-	}
-}
