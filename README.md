@@ -24,3 +24,7 @@ If you have `node.js` installed, you can use the scripts in `package.json` to bu
 If you don't have `node.js`, well, just copy the docker commands in the `package.json` file.
 
 By the way, not having `docker` installed is one way for this not to work, if that was not immediately obvious.
+
+### Notes
+1. To update swagger, run `swag init` on the root directory. If you do this without getting the dependencies installed, you need to get your head checked.
+    1. If you have `node.js` installed and want to automate this, you can run `npm run swagger:init` to achieve the same effect. Link this up with your build automation tool or IDE, if you cannot call the aforementioned command directly. 
