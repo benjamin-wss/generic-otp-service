@@ -14,6 +14,8 @@ To start local, just run `go run main.go` and it should work. If not, well, I gu
 
 ## Starting - Docker
 
+Remember to create your own `Dockerfile` based on the template provided.  
+
 If you have `node.js` installed, you can use the scripts in `package.json` to build and start the `docker` image. In order to do so, simply run these commands in sequence:
 
 1. `npm run docker:build`

@@ -7,9 +7,7 @@ type ApiInputBasicOtp struct {
 }
 
 type ApiInputValidateBasicOtp struct {
-	Requester      string `json:"requester" example:"jim@starfleet.com"`
-	Length         int    `json:"length"`
-	Interval       int    `json:"interval"`
+	ApiInputBasicOtp
 	Otp            string `json:"otp"`
 	ReferenceToken string `json:"referenceToken"`
 }

@@ -1,5 +1,7 @@
 package types
 
 type OtpConfig struct {
-	Secret string
+	OtpSecret                     string
+	OtpRequestLoggingEnabled      bool
+	OtpVerificationLoggingEnabled bool
 }

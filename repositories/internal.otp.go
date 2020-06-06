@@ -38,7 +38,7 @@ func (instance InternalOtp) ValidateTimeBasedOtp(length, interval int, otp, refe
 }
 
 func getSecret(prefix string) string {
-	baseResult := fmt.Sprintf("%s%s", prefix, config.AppConfig.Otp.Secret)
+	baseResult := fmt.Sprintf("%s%s", prefix, config.AppConfig.Otp.OtpSecret)
 	upperCaseResult := strings.ToUpper(baseResult)
 
 	return upperCaseResult

@@ -12,12 +12,12 @@ definitions:
     type: object
   dto.ApiInputValidateBasicOtp:
     properties:
-      interval:
-        type: integer
       length:
         type: integer
       otp:
         type: string
+      otpLifespanInSeconds:
+        type: integer
       referenceToken:
         type: string
       requester:
@@ -136,6 +136,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.ApiResultValidateBasicOtp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.HttpError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/dto.HttpError'
         "500":
           description: Internal Server Error
           schema:

@@ -112,6 +112,24 @@
                             "$ref": "#/definitions/dto.ApiResultValidateBasicOtp"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HttpError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HttpError"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/dto.HttpError"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -141,14 +159,14 @@
         "dto.ApiInputValidateBasicOtp": {
             "type": "object",
             "properties": {
-                "interval": {
-                    "type": "integer"
-                },
                 "length": {
                     "type": "integer"
                 },
                 "otp": {
                     "type": "string"
+                },
+                "otpLifespanInSeconds": {
+                    "type": "integer"
                 },
                 "referenceToken": {
                     "type": "string"
