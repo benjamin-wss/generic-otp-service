@@ -7,6 +7,7 @@ import (
 
 type IDbOtpLogRepository interface {
 	Create(input models.OtpLog) (models.OtpLog, error)
+	GetExistingEntry(requester string, otp string, referenceToken string) (*models.OtpLog, error)
 }
 
 func GetDbOtpLogRepository(dbConnection *gorm.DB) IDbOtpLogRepository {
@@ -25,4 +26,24 @@ func (instance DbOtpLogRepository) Create(input models.OtpLog) (models.OtpLog, e
 	}
 
 	return clonedInput, nil
+}
+
+func (instance DbOtpLogRepository) GetExistingEntry(requester string, otp string, referenceToken string) (*models.OtpLog, error) {
+	var payload models.OtpLog
+
+	dbResponse := instance.dbConnection.Where(&models.OtpLog{
+		Requester:      requester,
+		Otp:            &otp,
+		ReferenceToken: &referenceToken,
+	}).First(&payload)
+
+	if dbResponse.Error != nil && gorm.IsRecordNotFoundError(dbResponse.Error) == true {
+		return nil, nil
+	}
+
+	if dbResponse.Error != nil {
+		return nil, dbResponse.Error
+	}
+
+	return &payload, nil
 }

@@ -55,6 +55,8 @@ func (instance InternalOtpController) GenerateOtpNumber(context *gin.Context) {
 // @Produce  json
 // @Param payload body dto.ApiInputValidateBasicOtp true "Payload to validate T.O.T.P."
 // @Success 200 {object} dto.ApiResultValidateBasicOtp
+// @Failure 404 {object} dto.HttpError
+// @Failure 409 {object} dto.HttpError
 // @Failure 500 {object} dto.HttpError
 // @Router /api/internal/v1/validate [post]
 func (instance InternalOtpController) ValidateOtpNumber(context *gin.Context) {
@@ -65,7 +67,11 @@ func (instance InternalOtpController) ValidateOtpNumber(context *gin.Context) {
 		return
 	}
 
-	service := services.InternalOtpService{}
+	dbConnection := models.DbPrimary
+	otpLogDbRepository := repositories.GetDbOtpLogRepository(dbConnection)
+	service := services.InternalOtpService{
+		OtpLogDbRepository: otpLogDbRepository,
+	}
 	isValid, exception := service.ValidateOtpForApi(input.Requester, input.Length, input.OtpLifespanInSeconds, input.Otp, input.ReferenceToken)
 
 	if exception != nil {

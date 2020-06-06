@@ -15,6 +15,11 @@ type InternalOtpService struct {
 	OtpLogDbRepository repositories.IDbOtpLogRepository
 }
 
+const (
+	otpRequestNoLoggedError = `otp request does not exist`
+	otpRequestConsumed      = `otp was consumed`
+)
+
 func (instance InternalOtpService) GenerateOtpForApi(requester string, length int, interval int) (*dto.OtpRepositoryTimeBasedOtpResult, *dto.ApiErrorGeneric) {
 	inputIssue := guardOtpSetupParameters(length)
 
@@ -90,10 +95,22 @@ func (instance InternalOtpService) ValidateOtpForApi(requester string, length in
 	isValid, exception := instance.ValidateOtp(requester, length, interval, otp, referenceToken)
 
 	if exception != nil {
-		return false, &dto.ApiErrorGeneric{
+		customException := dto.ApiErrorGeneric{
 			HttpStatus: 500,
 			Error:      exception,
 		}
+
+		if exception.Error() == otpRequestNoLoggedError {
+			customException.HttpStatus = 404
+			return false, &customException
+		}
+
+		if exception.Error() == otpRequestConsumed {
+			customException.HttpStatus = 409
+			return false, &customException
+		}
+
+		return false, &customException
 	}
 
 	return isValid, nil
@@ -101,6 +118,22 @@ func (instance InternalOtpService) ValidateOtpForApi(requester string, length in
 
 func (instance InternalOtpService) ValidateOtp(requester string, length int, interval int, otp, referenceToken string) (bool, error) {
 	cleanedReferenceToken, referenceTokenRegExpError := cleanSecretSectionKey(referenceToken)
+
+	if config.AppConfig.Otp.OtpRequestLoggingEnabled == true {
+		acquireEntryResult, acquireEntryError := instance.OtpLogDbRepository.GetExistingEntry(requester, otp, referenceToken)
+
+		if acquireEntryError != nil {
+			return false, acquireEntryError
+		}
+
+		if acquireEntryResult == nil {
+			return false, errors.New(otpRequestNoLoggedError)
+		}
+
+		if acquireEntryResult.IsConsumed == true {
+			return false, errors.New(otpRequestConsumed)
+		}
+	}
 
 	if referenceTokenRegExpError != nil {
 		return false, referenceTokenRegExpError
