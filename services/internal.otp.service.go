@@ -15,8 +15,6 @@ type InternalOtpService struct {
 	OtpLogDbRepository repositories.IDbOtpLogRepository
 }
 
-const invalidSecretKeySegmentString = "string"
-
 func (instance InternalOtpService) GenerateOtpForApi(requester string, length int, interval int) (*dto.OtpRepositoryTimeBasedOtpResult, *dto.ApiErrorGeneric) {
 	inputIssue := guardOtpSetupParameters(length)
 
@@ -80,6 +78,8 @@ func (instance InternalOtpService) ValidateOtpForApi(requester string, length in
 		return false, inputIssue
 	}
 
+	const invalidSecretKeySegmentString = "string"
+
 	if strings.ToUpper(referenceToken) == strings.ToUpper(invalidSecretKeySegmentString) {
 		return false, &dto.ApiErrorGeneric{
 			HttpStatus: 400,
@@ -115,7 +115,7 @@ func (instance InternalOtpService) ValidateOtp(requester string, length int, int
 	return isValid, nil
 }
 
-func cleanSecretSectionKey(requester string) (string, error) {
+func cleanSecretSectionKey(secretSection string) (string, error) {
 	regularExpressionString := constants.RequesterRegularExpression
 	regularExpressionProcessor, err := regexp.Compile(regularExpressionString)
 
@@ -124,7 +124,7 @@ func cleanSecretSectionKey(requester string) (string, error) {
 		return "", regExCompileError
 	}
 
-	processedString := regularExpressionProcessor.ReplaceAllString(requester, "")
+	processedString := regularExpressionProcessor.ReplaceAllString(secretSection, "")
 	upperCaseString := strings.ToUpper(processedString)
 
 	return upperCaseString, nil
