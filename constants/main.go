@@ -7,6 +7,6 @@ func init() {
 
 	GenericDbErrorMessages =
 		&genericDbErrorMessages{
-			ConflictingEntryDetected: `conflictig db row located`,
+			ConflictingEntryDetected: `conflicting db row located`,
 		}
 }
