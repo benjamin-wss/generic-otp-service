@@ -58,6 +58,6 @@ func setupDbConfig() *types.DbConfig {
 }
 
 func setupGinConfig() *types.GinConfig {
-	mode := environmentVariableUtilities.GetEnvironmentVariableValuePointer("GIN_CONFIG")
+	mode := environmentVariableUtilities.GetEnvironmentVariableValuePointer("GIN_MODE")
 	return &types.GinConfig{Mode: mode}
 }
